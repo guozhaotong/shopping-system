@@ -3,6 +3,7 @@ package com.guozhaotong.shoppingsystem.mapper;
 import com.guozhaotong.shoppingsystem.entity.ShoppingCart;
 import org.apache.ibatis.annotations.*;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -13,8 +14,8 @@ public interface ShoppingCartMapper {
     @Select("select * from shopping_cart where buyer_id = #{buyer_id}")
     List<ShoppingCart> findByBuyerId(@Param("buyer_id") long buyerId);
 
-    @Delete("delete from shopping_cart where id = #{id}")
-    int deleteById(long id);
+    @Delete("delete from shopping_cart where buyer_id = #{buyerId} and commodity_id= #{commodityId}")
+    int deleteById(long buyerId, long commodityId);
 
     @Insert("insert into shopping_cart (buyer_id, commodity_id, num, add_time) values (#{buyerId}, #{commodityId}, " +
             "#{num}, #{addTime})") //#{addTime, jdbcType=TIMESTAMP}
@@ -23,7 +24,7 @@ public interface ShoppingCartMapper {
     @Select("select count(*) from shopping_cart where buyer_id = #{buyerId} and commodity_id= #{commodityId}")
     int countBuyerIdAndCommodityId(long buyerId, long commodityId);
 
-    @Update("update shopping_cart set num = #{num} where buyer_id = #{buyerId} and commodity_id= #{commodityId}")
-    int updateNumByBuyerIdAndCommodityId(int num, long buyerId, long commodityId);
+    @Update("update shopping_cart set num = #{num}, add_time = #{add_time} where buyer_id = #{buyerId} and commodity_id= #{commodityId}")
+    int updateNumByBuyerIdAndCommodityId(int num, long buyerId, long commodityId, @Param("add_time") Date addTime);
 
 }

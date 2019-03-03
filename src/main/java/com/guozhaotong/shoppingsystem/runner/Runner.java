@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
  * @author 郭朝彤
  * @date 2019/3/1.
  */
-@Component
+//@Component
 public class Runner implements CommandLineRunner {
 
 

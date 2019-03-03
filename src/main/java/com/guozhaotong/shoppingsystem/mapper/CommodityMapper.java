@@ -1,10 +1,7 @@
 package com.guozhaotong.shoppingsystem.mapper;
 
 import com.guozhaotong.shoppingsystem.entity.Commodity;
-import org.apache.ibatis.annotations.Delete;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -15,6 +12,12 @@ import java.util.List;
 public interface CommodityMapper {
     @Select("select * from commodity")
     List<Commodity> findAll();
+
+    @Select("select * from commodity where commodity_id = #{commodity_id}")
+    Commodity findByCommodityId(@Param("commodity_id") long commodityId);
+
+    @Select("select count(*) from commodity")
+    int countCommodity();
 
     @Delete("delete from commodity where id = #{id}")
     int deleteById(long id);
