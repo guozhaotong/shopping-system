@@ -1,6 +1,7 @@
 package com.guozhaotong.shoppingsystem.entity;
 
 import java.util.Date;
+import java.util.Objects;
 
 /**
  * @author 郭朝彤
@@ -12,6 +13,24 @@ public class ShoppingCart {
     long commodityId;
     int num;
     Date addTime;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof ShoppingCart)) {
+            return false;
+        }
+        ShoppingCart that = (ShoppingCart) o;
+        return id == that.id;
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(id);
+    }
 
     public ShoppingCart() {
     }
@@ -73,4 +92,5 @@ public class ShoppingCart {
                 ", addTime=" + addTime +
                 '}';
     }
+
 }

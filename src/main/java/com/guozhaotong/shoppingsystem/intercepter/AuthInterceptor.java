@@ -26,7 +26,7 @@ public class AuthInterceptor extends WebMvcConfigurationSupport implements Handl
     /**
      * 不需要登录拦截的url
      */
-    final String[] notLoginInterceptPaths = {"/static/**","/admin/login","/error/**","/login"};
+    final String[] notLoginInterceptPaths = {"/static/**", "/admin/login", "/error/**", "/login"};
 
     @Override
     protected void addInterceptors(InterceptorRegistry registry) {
@@ -40,7 +40,7 @@ public class AuthInterceptor extends WebMvcConfigurationSupport implements Handl
             throws Exception {
         String token = null;
         Cookie[] cookies = request.getCookies();
-        if(cookies == null){
+        if (cookies == null) {
             Writer writer = response.getWriter();
             ResponseEntity responseEntity = new ResponseEntity(401, "Please login", null);
             writer.write(JSON.toJSONString(responseEntity));
@@ -67,6 +67,7 @@ public class AuthInterceptor extends WebMvcConfigurationSupport implements Handl
                     writer.write(JSON.toJSONString(responseEntity));
                     return false;
                 } else {
+                    UserInfoController.tokenMap.put(token, System.currentTimeMillis());
                     return true;
                 }
             } else {

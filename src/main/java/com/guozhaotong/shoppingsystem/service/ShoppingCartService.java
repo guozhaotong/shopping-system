@@ -41,10 +41,14 @@ public class ShoppingCartService {
     }
 
     public boolean deleteShoppingCartOneRecord(long buyerId, long commodityId){
-        return shoppingCartMapper.deleteById(buyerId, commodityId) == 1;
+        return shoppingCartMapper.deleteByBuyerIdAndCommodityId(buyerId, commodityId) == 1;
     }
 
-    public static void main(String[] args) {
+    public float getSumPriceOfShoppingCart(long buyerId){
+        return shoppingCartMapper.sumPrice(buyerId);
+    }
 
+    public int deleteShoppingCartByBuyerId(long buyerId){
+        return shoppingCartMapper.deleteByBuyerId(buyerId);
     }
 }

@@ -16,8 +16,12 @@ public class OrderInfoService {
     @Autowired
     OrderInfoMapper orderInfoMapper;
 
-    public List<OrderInfo> getOrderList(long buyerId) {
+    public List<OrderInfo> getOrderListByBuyerId(long buyerId) {
         return orderInfoMapper.findByBuyerId(buyerId);
+    }
+
+    public List<OrderInfo> getOrderListBySellerId(long sellerId) {
+        return orderInfoMapper.findBySellerId(sellerId);
     }
 
     /**

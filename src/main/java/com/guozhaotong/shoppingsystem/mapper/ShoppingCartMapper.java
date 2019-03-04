@@ -15,7 +15,10 @@ public interface ShoppingCartMapper {
     List<ShoppingCart> findByBuyerId(@Param("buyer_id") long buyerId);
 
     @Delete("delete from shopping_cart where buyer_id = #{buyerId} and commodity_id= #{commodityId}")
-    int deleteById(long buyerId, long commodityId);
+    int deleteByBuyerIdAndCommodityId(long buyerId, long commodityId);
+
+    @Delete("delete from shopping_cart where buyer_id = #{buyerId}")
+    int deleteByBuyerId(long buyerId);
 
     @Insert("insert into shopping_cart (buyer_id, commodity_id, num, add_time) values (#{buyerId}, #{commodityId}, " +
             "#{num}, #{addTime})") //#{addTime, jdbcType=TIMESTAMP}
@@ -27,4 +30,6 @@ public interface ShoppingCartMapper {
     @Update("update shopping_cart set num = #{num}, add_time = #{add_time} where buyer_id = #{buyerId} and commodity_id= #{commodityId}")
     int updateNumByBuyerIdAndCommodityId(int num, long buyerId, long commodityId, @Param("add_time") Date addTime);
 
+    @Select("select sum(s.num * c.price ) from commodity c, shopping_cart s where c.id = s.commodity_id and s.buyer_id = #{buyer_id}")
+    float sumPrice(@Param("buyer_id") long buyerId);
 }

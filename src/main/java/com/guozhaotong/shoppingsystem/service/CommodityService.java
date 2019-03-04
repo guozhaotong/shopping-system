@@ -6,6 +6,7 @@ import com.guozhaotong.shoppingsystem.mapper.OrderInfoMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
 import java.util.List;
 
 /**
@@ -24,8 +25,12 @@ public class CommodityService {
         return commodityMapper.findAll();
     }
 
+    public List<Long> getCommodityIdList(){
+        return commodityMapper.findAllCommodityId();
+    }
+
     public boolean addNewCommodity(Commodity commodity) {
-        if(commodityMapper.countCommodity() < 1000) {
+        if (commodityMapper.countCommodity() < 1000) {
             commodityMapper.insert(commodity);
             return true;
         } else {
@@ -43,6 +48,7 @@ public class CommodityService {
 
     /**
      * 题目要求卖出去过的商品不能被删除。
+     *
      * @param commodityId
      * @return
      */
@@ -56,7 +62,27 @@ public class CommodityService {
         }
     }
 
-    public static void main(String[] args) {
+    public void deleteUselessPic(long commodityId) {
+        String picAddr = commodityMapper.getCommodityPicAddr(commodityId);
+        String realPath = System.getProperty("user.home") + "\\shopping_system_img\\";
+        File fileDir = new File(realPath);
+        String[] fileNames = fileDir.list();
+        if(fileNames != null){
+            for (String fileName : fileNames) {
+                if (fileName.startsWith(commodityId + "_") && !fileName.equals(picAddr)) {
+                    File fileDelete = new File(fileName);
+                    fileDelete.delete();
+                    break;
+                }
+            }
+        }
+    }
 
+    public float getCommodityPrice(long id){
+        return commodityMapper.getCommodityPrice(id);
+    }
+
+    public int countCommodityById(long id){
+        return commodityMapper.countCommodityById(id);
     }
 }

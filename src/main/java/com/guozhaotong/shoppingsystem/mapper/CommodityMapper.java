@@ -13,11 +13,17 @@ public interface CommodityMapper {
     @Select("select * from commodity")
     List<Commodity> findAll();
 
-    @Select("select * from commodity where commodity_id = #{commodity_id}")
+    @Select("Select id from commodity")
+    List<Long> findAllCommodityId();
+
+    @Select("select * from commodity where id = #{commodity_id}")
     Commodity findByCommodityId(@Param("commodity_id") long commodityId);
 
     @Select("select count(*) from commodity")
     int countCommodity();
+
+    @Select("select count(*) from commodity where id = #{id}")
+    int countCommodityById(long id);
 
     @Delete("delete from commodity where id = #{id}")
     int deleteById(long id);
@@ -29,4 +35,10 @@ public interface CommodityMapper {
     @Update("update commodity set title = #{title}, brief = #{brief}, intro = #{intro}, price = #{price}, pic_addr = #{picAddr} " +
             "where id = #{id}")
     int updateNumByBuyerIdAndCommodityId(Commodity commodity);
+
+    @Select("select pic_addr from commodity where id = #{id}")
+    String getCommodityPicAddr(long id);
+
+    @Select("select price from commodity where id = #{id}")
+    float getCommodityPrice(long id);
 }

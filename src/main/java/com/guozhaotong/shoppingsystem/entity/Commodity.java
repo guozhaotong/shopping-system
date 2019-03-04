@@ -1,5 +1,7 @@
 package com.guozhaotong.shoppingsystem.entity;
 
+import java.util.Objects;
+
 /**
  * @author 郭朝彤
  * @date 2019/3/1.
@@ -12,6 +14,24 @@ public class Commodity {
     String intro;
     float price;
     String picAddr;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof Commodity)) {
+            return false;
+        }
+        Commodity commodity = (Commodity) o;
+        return id == commodity.id;
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(id);
+    }
 
     public Commodity() {
     }
