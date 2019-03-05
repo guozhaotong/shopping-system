@@ -1,7 +1,7 @@
 package com.guozhaotong.shoppingsystem.controller;
 
 import com.guozhaotong.shoppingsystem.entity.OrderInfo;
-import com.guozhaotong.shoppingsystem.entity.ResponseEntity;
+import com.guozhaotong.shoppingsystem.entity.ResultEntity;
 import com.guozhaotong.shoppingsystem.entity.ShoppingCart;
 import com.guozhaotong.shoppingsystem.service.CommodityService;
 import com.guozhaotong.shoppingsystem.service.OrderInfoService;
@@ -30,26 +30,27 @@ public class OrderInfoController {
     CommodityService commodityService;
 
     @GetMapping("/getOrderList")
-    public ResponseEntity getOrderList(long buyerId) {
+    public ResultEntity getOrderList(long buyerId) {
         List<OrderInfo> res = orderInfoService.getOrderListByBuyerId(buyerId);
-        return new ResponseEntity(200, "success!", res);
+        return new ResultEntity(200, "success!", res);
     }
 
-    @PostMapping("/buyOne")
-    public ResponseEntity buyOne(long buyerId, long commodityId, int num) {
+//    @PostMapping("/buyOne")
+    public ResultEntity buyOne(long buyerId, long commodityId, int num) {
         boolean res =  orderInfoService.addNewOrder(new OrderInfo(buyerId, commodityId, new Date(), num, commodityService.getCommodityPrice(commodityId)));
         //购买后，购物车中的内容随之删除
         shoppingCartService.deleteShoppingCartOneRecord(buyerId, commodityId);
-        return new ResponseEntity(200, "success!", res);
+        return new ResultEntity(200, "success!", res);
     }
 
     @GetMapping("/sumPrice")
-    public ResponseEntity getSumPriceOfBuyer(long buyerId){
+    public ResultEntity getSumPriceOfBuyer(long buyerId){
         float res = orderInfoService.getSumPriceOfBuyer(buyerId);
-        return new ResponseEntity(200, "success!", res);
+        return new ResultEntity(200, "success!", res);
     }
 
-    public ResponseEntity buy(long buyerId){
+    @PostMapping("/buyAllShoppingCart")
+    public ResultEntity buy(long buyerId){
         List<ShoppingCart> shoppingCartListOfBuyer = shoppingCartService.getShoppingCartList(buyerId);
         for(ShoppingCart shoppingCart : shoppingCartListOfBuyer){
             if(commodityService.countCommodityById(shoppingCart.getCommodityId()) != 0) {
@@ -57,6 +58,6 @@ public class OrderInfoController {
             }
         }
         shoppingCartService.deleteShoppingCartByBuyerId(buyerId);
-        return new ResponseEntity(200, "success!", null);
+        return new ResultEntity(200, "success!", null);
     }
 }

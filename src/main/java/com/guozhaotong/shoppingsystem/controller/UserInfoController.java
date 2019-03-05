@@ -1,6 +1,6 @@
 package com.guozhaotong.shoppingsystem.controller;
 
-import com.guozhaotong.shoppingsystem.entity.ResponseEntity;
+import com.guozhaotong.shoppingsystem.entity.ResultEntity;
 import com.guozhaotong.shoppingsystem.entity.UserInfo;
 import com.guozhaotong.shoppingsystem.service.UserInfoService;
 import com.guozhaotong.shoppingsystem.util.Encryption;
@@ -8,7 +8,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.Cookie;
@@ -32,7 +31,7 @@ public class UserInfoController {
     UserInfoService userInfoService;
 
     @GetMapping("/login")
-    public ResponseEntity login(String userName, String passwordMd, HttpServletResponse httpServletResponse) {
+    public ResultEntity login(String userName, String passwordMd, HttpServletResponse httpServletResponse) {
         boolean infoIsTrue = userInfoService.login(userName, passwordMd);
         if (infoIsTrue) {
             UserInfo userInfo = userInfoService.findByUserName(userName);
@@ -41,9 +40,9 @@ public class UserInfoController {
             tokenMap.put(token, System.currentTimeMillis());
             logger.debug(token);
             httpServletResponse.addCookie(new Cookie("token", token));
-            return new ResponseEntity(200, "success!", null);
+            return new ResultEntity(200, "success!", null);
         } else {
-            return new ResponseEntity(403, "fail!", null);
+            return new ResultEntity(403, "fail!", null);
         }
     }
 

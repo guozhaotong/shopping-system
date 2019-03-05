@@ -1,7 +1,6 @@
 package com.guozhaotong.shoppingsystem.controller;
 
-import com.guozhaotong.shoppingsystem.entity.Commodity;
-import com.guozhaotong.shoppingsystem.entity.ResponseEntity;
+import com.guozhaotong.shoppingsystem.entity.ResultEntity;
 import com.guozhaotong.shoppingsystem.entity.ShoppingCart;
 import com.guozhaotong.shoppingsystem.service.CommodityService;
 import com.guozhaotong.shoppingsystem.service.ShoppingCartService;
@@ -26,7 +25,7 @@ public class ShoppingCartController {
     CommodityService commodityService;
 
     @GetMapping("/getShoppingCartList")
-    public ResponseEntity getShoppingCartList(long buyerId) {
+    public ResultEntity getShoppingCartList(long buyerId) {
         LinkedHashMap<ShoppingCart, Boolean> res = new LinkedHashMap<>();
         List<ShoppingCart> shoppingCartList = shoppingCartService.getShoppingCartList(buyerId);
         List<Long> commodityIdList = commodityService.getCommodityIdList();
@@ -38,24 +37,24 @@ public class ShoppingCartController {
             }
         }
 
-        return new ResponseEntity(200, "success!", res);
+        return new ResultEntity(200, "success!", res);
     }
 
     @PostMapping("/addCommodityToShoppingCart")
-    public ResponseEntity addCommodityToShoppingCart(long buyerId, long commodityId, int num) {
+    public ResultEntity addCommodityToShoppingCart(long buyerId, long commodityId, int num) {
         boolean res = shoppingCartService.addCommodityToShoppingCart(buyerId, commodityId, num);
-        return new ResponseEntity(200, "success!", res);
+        return new ResultEntity(200, "success!", res);
     }
 
     @PostMapping("/deleteShoppingCartOneRecord")
-    public ResponseEntity deleteShoppingCartOneRecord(long buyerId, long commodityId) {
+    public ResultEntity deleteShoppingCartOneRecord(long buyerId, long commodityId) {
         boolean res = shoppingCartService.deleteShoppingCartOneRecord(buyerId, commodityId);
-        return new ResponseEntity(200, "success!", res);
+        return new ResultEntity(200, "success!", res);
     }
 
     @GetMapping("/getSumPriceOfShoppingCart")
-    public ResponseEntity getSumPriceOfShoppingCart(long buyerId) {
+    public ResultEntity getSumPriceOfShoppingCart(long buyerId) {
         float res = shoppingCartService.getSumPriceOfShoppingCart(buyerId);
-        return new ResponseEntity(200, "success!", res);
+        return new ResultEntity(200, "success!", res);
     }
 }

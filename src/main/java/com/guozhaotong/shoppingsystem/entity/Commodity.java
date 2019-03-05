@@ -1,19 +1,20 @@
 package com.guozhaotong.shoppingsystem.entity;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 /**
  * @author 郭朝彤
  * @date 2019/3/1.
  */
-public class Commodity {
-    long id;
-    long sellerId;
-    String title;
-    String brief;
-    String intro;
-    float price;
-    String picAddr;
+public class Commodity implements Serializable {
+    private long id;
+    private long sellerId;
+    private String title;
+    private String brief;
+    private String intro;
+    private float price;
+    private String picAddr;
 
     @Override
     public boolean equals(Object o) {
@@ -37,6 +38,16 @@ public class Commodity {
     }
 
     public Commodity(long sellerId, String title, String brief, String intro, float price, String picAddr) {
+        this.sellerId = sellerId;
+        this.title = title;
+        this.brief = brief;
+        this.intro = intro;
+        this.price = price;
+        this.picAddr = picAddr;
+    }
+
+    public Commodity(long id, long sellerId, String title, String brief, String intro, float price, String picAddr) {
+        this.id = id;
         this.sellerId = sellerId;
         this.title = title;
         this.brief = brief;

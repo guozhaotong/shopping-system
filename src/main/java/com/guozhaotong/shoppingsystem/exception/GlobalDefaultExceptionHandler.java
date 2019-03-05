@@ -1,7 +1,7 @@
 package com.guozhaotong.shoppingsystem.exception;
 
 import com.alibaba.fastjson.JSON;
-import com.guozhaotong.shoppingsystem.entity.ResponseEntity;
+import com.guozhaotong.shoppingsystem.entity.ResultEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -24,8 +24,8 @@ public class GlobalDefaultExceptionHandler {
     public void defaultErrorHandler(HttpServletRequest req, Exception e, HttpServletResponse response) throws IOException {
         logger.error(e.getMessage(),e);
         Writer writer = response.getWriter();
-        ResponseEntity responseEntity = new ResponseEntity(500, "Internal error", null);
-        writer.write(JSON.toJSONString(responseEntity));
+        ResultEntity resultEntity = new ResultEntity(500, "Internal error", null);
+        writer.write(JSON.toJSONString(resultEntity));
     }
 
 }

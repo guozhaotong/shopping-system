@@ -25,7 +25,7 @@ public class CommodityService {
         return commodityMapper.findAll();
     }
 
-    public List<Long> getCommodityIdList(){
+    public List<Long> getCommodityIdList() {
         return commodityMapper.findAllCommodityId();
     }
 
@@ -43,7 +43,7 @@ public class CommodityService {
     }
 
     public Commodity getCommodity(long commodityId) {
-        return commodityMapper.findByCommodityId(commodityId);
+        return commodityMapper.findById(commodityId);
     }
 
     /**
@@ -62,27 +62,21 @@ public class CommodityService {
         }
     }
 
-    public void deleteUselessPic(long commodityId) {
+    public void deleteUselessPic(long commodityId, String newPicAddr) {
         String picAddr = commodityMapper.getCommodityPicAddr(commodityId);
-        String realPath = System.getProperty("user.home") + "\\shopping_system_img\\";
-        File fileDir = new File(realPath);
-        String[] fileNames = fileDir.list();
-        if(fileNames != null){
-            for (String fileName : fileNames) {
-                if (fileName.startsWith(commodityId + "_") && !fileName.equals(picAddr)) {
-                    File fileDelete = new File(fileName);
-                    fileDelete.delete();
-                    break;
-                }
-            }
+        if (picAddr == null || picAddr.equals(newPicAddr)) {
+            return;
         }
+        String realPath = System.getProperty("user.home") + "\\shopping_system_img\\";
+        File fileDelete = new File(realPath + picAddr);
+        fileDelete.delete();
     }
 
-    public float getCommodityPrice(long id){
+    public float getCommodityPrice(long id) {
         return commodityMapper.getCommodityPrice(id);
     }
 
-    public int countCommodityById(long id){
+    public int countCommodityById(long id) {
         return commodityMapper.countCommodityById(id);
     }
 }

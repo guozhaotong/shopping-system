@@ -16,8 +16,8 @@ public interface CommodityMapper {
     @Select("Select id from commodity")
     List<Long> findAllCommodityId();
 
-    @Select("select * from commodity where id = #{commodity_id}")
-    Commodity findByCommodityId(@Param("commodity_id") long commodityId);
+    @Select("select * from commodity where id = #{id}")
+    Commodity findById(@Param("id") long id);
 
     @Select("select count(*) from commodity")
     int countCommodity();

@@ -4,15 +4,15 @@ package com.guozhaotong.shoppingsystem.entity;
  * @author 郭朝彤
  * @date 2019/3/3.
  */
-public class ResponseEntity {
+public class ResultEntity {
     private int code;
     private String msg;
     private Object data;
 
-    public ResponseEntity() {
+    public ResultEntity() {
     }
 
-    public ResponseEntity(int code, String msg, Object data) {
+    public ResultEntity(int code, String msg, Object data) {
         this.code = code;
         this.msg = msg;
         this.data = data;
@@ -44,7 +44,7 @@ public class ResponseEntity {
 
     @Override
     public String toString() {
-        return "ResponseEntity{" +
+        return "ResultEntity{" +
                 "code=" + code +
                 ", msg='" + msg + '\'' +
                 ", data=" + data +

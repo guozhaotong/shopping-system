@@ -16,7 +16,7 @@ public interface OrderInfoMapper {
     @Select("select * from order_info where buyer_id = #{buyer_id}")
     List<OrderInfo> findByBuyerId(@Param("buyer_id") long buyerId);
 
-    @Select("select * from order_info where seller_id = #{seller_id}")
+    @Select("select * from order_info o, commodity c where c.id = o.commodity_id and c.seller_id = #{seller_id}")
     List<OrderInfo> findBySellerId(@Param("seller_id") long sellerId);
 
     @Select("select sum(num*price_when_buy) from order_info where buyer_id = #{buyer_id}")

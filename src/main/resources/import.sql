@@ -16,7 +16,6 @@ create table order_info (id int primary key auto_increment,
 drop table if exists commodity;
 create table commodity (id int primary key auto_increment,
                         seller_id int,
-                        commodity_id int,
                         title varchar(255),
                         brief varchar(255),
                         intro varchar(255),
@@ -26,4 +25,4 @@ create table commodity (id int primary key auto_increment,
 
 drop table if exists shopping_cart;
 create table shopping_cart (id int primary key auto_increment, buyer_id int, commodity_id int, num int, add_time timestamp);
-insert into shopping_cart (id, buyer_id, commodity_id, num, add_time) values (1, 1, 6, 9, select now());
+-- insert into shopping_cart (id, buyer_id, commodity_id, num, add_time) values (1, 1, 6, 9, select now());

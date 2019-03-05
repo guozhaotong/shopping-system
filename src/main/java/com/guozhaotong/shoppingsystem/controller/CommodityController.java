@@ -2,7 +2,7 @@ package com.guozhaotong.shoppingsystem.controller;
 
 import com.guozhaotong.shoppingsystem.entity.Commodity;
 import com.guozhaotong.shoppingsystem.entity.OrderInfo;
-import com.guozhaotong.shoppingsystem.entity.ResponseEntity;
+import com.guozhaotong.shoppingsystem.entity.ResultEntity;
 import com.guozhaotong.shoppingsystem.entity.UserInfo;
 import com.guozhaotong.shoppingsystem.service.CommodityService;
 import com.guozhaotong.shoppingsystem.service.OrderInfoService;
@@ -13,6 +13,7 @@ import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,6 +23,7 @@ import java.io.*;
 import java.net.URLEncoder;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * @author 郭朝彤
@@ -40,19 +42,21 @@ public class CommodityController {
     OrderInfoService orderInfoService;
 
     @GetMapping("/getCommodityList")
-    public ResponseEntity getCommodityList(String userName) {
+    public ResultEntity getCommodityList(String userName) {
         LinkedHashMap<Commodity, Integer> res = new LinkedHashMap<>();
-        UserInfo userInfo = userInfoService.findByUserName(userName);
-        String userIdentity = userInfo.getIdentity();
+
         List<Commodity> commodityList = commodityService.getCommodityList();
         //无用户登录时，展示物品列表
         if (userName == null) {
             for (Commodity commodity : commodityList) {
                 res.put(commodity, -1);
             }
+            return new ResultEntity(200, "success!", res);
         }
+        UserInfo userInfo = userInfoService.findByUserName(userName);
+        String userIdentity = userInfo.getIdentity();
         //买家登录时，展示物品列表并标明已购买
-        else if ("buyer".equals(userIdentity)) {
+        if ("buyer".equals(userIdentity)) {
             List<OrderInfo> orderInfoList = orderInfoService.getOrderListByBuyerId(userInfo.getId());
             for (Commodity commodity : commodityList) {
                 res.put(commodity, 0);
@@ -71,30 +75,30 @@ public class CommodityController {
                 res.put(commodityService.getCommodity(orderInfo.getCommodityId()), res.get(commodityService.getCommodity(orderInfo.getCommodityId())) + orderInfo.getNum());
             }
         }
-        return new ResponseEntity(200, "success!", res);
+        return new ResultEntity(200, "success!", res);
     }
 
     @PostMapping("/addNewCommodity")
-    public ResponseEntity addNewCommodity(Commodity commodity) {
+    public ResultEntity addNewCommodity(Commodity commodity) {
         boolean res = commodityService.addNewCommodity(commodity);
-        return new ResponseEntity(200, "success!", res);
+        return new ResultEntity(200, "success!", res);
     }
 
     @PostMapping("/updateCommodity")
-    public ResponseEntity updateCommodity(Commodity commodity) {
+    public ResultEntity updateCommodity(Commodity commodity) {
+        commodityService.deleteUselessPic(commodity.getId(), commodity.getPicAddr());
         boolean res = commodityService.updateCommodity(commodity);
-        commodityService.deleteUselessPic(commodity.getId());
-        return new ResponseEntity(200, "success!", res);
+        return new ResultEntity(200, "success!", res);
     }
 
     @GetMapping("/getCommodity")
-    public ResponseEntity getCommodity(long commodityId) {
+    public ResultEntity getCommodity(long commodityId) {
         Commodity res = commodityService.getCommodity(commodityId);
-        return new ResponseEntity(200, "success!", res);
+        return new ResultEntity(200, "success!", res);
     }
 
     @PostMapping("/updatePic")
-    public ResponseEntity uploadFile(MultipartFile file, long commodityId) {
+    public ResultEntity uploadFile(MultipartFile file) {
         String filename = file.getOriginalFilename();
         String realPath = System.getProperty("user.home") + "/shopping_system_img/";
         File fileDir = new File(realPath);
@@ -105,10 +109,10 @@ public class CommodityController {
         String extName = FilenameUtils.getExtension(filename);
         String allowImgFormat = "gif,jpg,jpeg,png";
         if (!allowImgFormat.contains(extName.toLowerCase())) {
-            return new ResponseEntity(400, "No image!", "NOT_IMAGE");
+            return new ResultEntity(400, "No image!", "NOT_IMAGE");
         }
 
-        filename = commodityId + "_" + System.currentTimeMillis() + "." + extName;
+        filename = UUID.randomUUID().toString() + "." + extName;
         InputStream input = null;
         FileOutputStream fos = null;
         try {
@@ -122,14 +126,20 @@ public class CommodityController {
             IOUtils.closeQuietly(input);
             IOUtils.closeQuietly(fos);
         }
-        return new ResponseEntity(200, "Success!", filename);
+        return new ResultEntity(200, "Success!", filename);
     }
 
     @GetMapping(value = "/showPic")
-    public org.springframework.http.ResponseEntity showPic(String fileName) {
+    public org.springframework.http.ResponseEntity showPic(String fileName) throws FileNotFoundException {
         org.springframework.http.ResponseEntity responseEntity = null;
         String filePath = System.getProperty("user.home") + "/shopping_system_img/";
-        File file = new File(filePath + fileName);
+        File file = null;
+        if(fileName == null || fileName.trim().equals("")){
+            file = ResourceUtils.getFile("classpath:static/img/default.png");
+            fileName = "default.png";
+        } else {
+            file = new File(filePath + fileName);
+        }
         if (file.exists()) { //判断文件父目录是否存在
             Object att = null;
             try {
@@ -140,7 +150,7 @@ public class CommodityController {
             try {
                 responseEntity = org.springframework.http.ResponseEntity
                         .status(HttpStatus.OK)
-                        .header("Content-disposition", "attachment;filename=" + URLEncoder.encode(fileName.substring(23), "UTF-8"))
+                        .header("Content-disposition", "attachment;filename=" + URLEncoder.encode(fileName, "UTF-8"))
                         .contentType(MediaType.APPLICATION_OCTET_STREAM)
                         .body(att);
             } catch (UnsupportedEncodingException e) {

@@ -2,10 +2,9 @@ package com.guozhaotong.shoppingsystem.intercepter;
 
 import com.alibaba.fastjson.JSON;
 import com.guozhaotong.shoppingsystem.controller.UserInfoController;
-import com.guozhaotong.shoppingsystem.entity.ResponseEntity;
+import com.guozhaotong.shoppingsystem.entity.ResultEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
@@ -42,8 +41,8 @@ public class AuthInterceptor extends WebMvcConfigurationSupport implements Handl
         Cookie[] cookies = request.getCookies();
         if (cookies == null) {
             Writer writer = response.getWriter();
-            ResponseEntity responseEntity = new ResponseEntity(401, "Please login", null);
-            writer.write(JSON.toJSONString(responseEntity));
+            ResultEntity resultEntity = new ResultEntity(401, "Please login", null);
+            writer.write(JSON.toJSONString(resultEntity));
             return false;
         }
         for (Cookie cookie : cookies) {
@@ -55,16 +54,16 @@ public class AuthInterceptor extends WebMvcConfigurationSupport implements Handl
         logger.debug(token);
         if (token == null) {
             Writer writer = response.getWriter();
-            ResponseEntity responseEntity = new ResponseEntity(401, "Please login", null);
-            writer.write(JSON.toJSONString(responseEntity));
+            ResultEntity resultEntity = new ResultEntity(401, "Please login", null);
+            writer.write(JSON.toJSONString(resultEntity));
             return false;
         } else {
             if (UserInfoController.tokenMap.containsKey(token)) {
                 long timeOfToken = UserInfoController.tokenMap.get(token);
                 if (System.currentTimeMillis() - timeOfToken > (30 * 60 * 1000)) {
                     Writer writer = response.getWriter();
-                    ResponseEntity responseEntity = new ResponseEntity(401, "Please login again", null);
-                    writer.write(JSON.toJSONString(responseEntity));
+                    ResultEntity resultEntity = new ResultEntity(401, "Please login again", null);
+                    writer.write(JSON.toJSONString(resultEntity));
                     return false;
                 } else {
                     UserInfoController.tokenMap.put(token, System.currentTimeMillis());
@@ -72,8 +71,8 @@ public class AuthInterceptor extends WebMvcConfigurationSupport implements Handl
                 }
             } else {
                 Writer writer = response.getWriter();
-                ResponseEntity responseEntity = new ResponseEntity(401, "Cannot verify identity, please login", null);
-                writer.write(JSON.toJSONString(responseEntity));
+                ResultEntity resultEntity = new ResultEntity(401, "Cannot verify identity, please login", null);
+                writer.write(JSON.toJSONString(resultEntity));
                 return false;
             }
         }
