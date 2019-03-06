@@ -14,6 +14,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * @author 郭朝彤
@@ -36,7 +37,7 @@ public class UserInfoController {
         if (infoIsTrue) {
             UserInfo userInfo = userInfoService.findByUserName(userName);
             //token为用base64加密后的用户ID+身份
-            String token = Encryption.base64(userInfo.getId() + " " + userInfo.getIdentity());
+            String token = Encryption.base64(userInfo.getId() + "|" + userInfo.getIdentity()+"|"+ UUID.randomUUID().toString());
             tokenMap.put(token, System.currentTimeMillis());
             logger.debug(token);
             httpServletResponse.addCookie(new Cookie("token", token));

@@ -1,5 +1,6 @@
 package com.guozhaotong.shoppingsystem.controller;
 
+import com.guozhaotong.shoppingsystem.entity.KV;
 import com.guozhaotong.shoppingsystem.entity.ResultEntity;
 import com.guozhaotong.shoppingsystem.entity.ShoppingCart;
 import com.guozhaotong.shoppingsystem.service.CommodityService;
@@ -9,7 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.LinkedHashMap;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -26,14 +27,15 @@ public class ShoppingCartController {
 
     @GetMapping("/getShoppingCartList")
     public ResultEntity getShoppingCartList(long buyerId) {
-        LinkedHashMap<ShoppingCart, Boolean> res = new LinkedHashMap<>();
+        List<KV> res = new ArrayList<>();
+//        LinkedHashMap<ShoppingCart, Boolean> res = new LinkedHashMap<>();
         List<ShoppingCart> shoppingCartList = shoppingCartService.getShoppingCartList(buyerId);
         List<Long> commodityIdList = commodityService.getCommodityIdList();
         for (ShoppingCart shoppingCart : shoppingCartList) {
             if (commodityIdList.contains(shoppingCart.getCommodityId())) {
-                res.put(shoppingCart, true);
+                res.add(new KV(shoppingCart, true));
             } else {
-                res.put(shoppingCart, false);
+                res.add(new KV(shoppingCart, false));
             }
         }
 

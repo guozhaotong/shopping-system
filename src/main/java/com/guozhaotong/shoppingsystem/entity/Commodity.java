@@ -1,13 +1,12 @@
 package com.guozhaotong.shoppingsystem.entity;
 
-import java.io.Serializable;
 import java.util.Objects;
 
 /**
  * @author 郭朝彤
  * @date 2019/3/1.
  */
-public class Commodity implements Serializable {
+public class Commodity {
     private long id;
     private long sellerId;
     private String title;

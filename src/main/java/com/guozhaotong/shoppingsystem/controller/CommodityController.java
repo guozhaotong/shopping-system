@@ -1,9 +1,6 @@
 package com.guozhaotong.shoppingsystem.controller;
 
-import com.guozhaotong.shoppingsystem.entity.Commodity;
-import com.guozhaotong.shoppingsystem.entity.OrderInfo;
-import com.guozhaotong.shoppingsystem.entity.ResultEntity;
-import com.guozhaotong.shoppingsystem.entity.UserInfo;
+import com.guozhaotong.shoppingsystem.entity.*;
 import com.guozhaotong.shoppingsystem.service.CommodityService;
 import com.guozhaotong.shoppingsystem.service.OrderInfoService;
 import com.guozhaotong.shoppingsystem.service.UserInfoService;
@@ -21,9 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
 import java.net.URLEncoder;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * @author 郭朝彤
@@ -43,13 +38,13 @@ public class CommodityController {
 
     @GetMapping("/getCommodityList")
     public ResultEntity getCommodityList(String userName) {
-        LinkedHashMap<Commodity, Integer> res = new LinkedHashMap<>();
+        List<KV> res = new ArrayList<>();
 
         List<Commodity> commodityList = commodityService.getCommodityList();
         //无用户登录时，展示物品列表
         if (userName == null) {
             for (Commodity commodity : commodityList) {
-                res.put(commodity, -1);
+                res.add(new KV(commodity, -1));
             }
             return new ResultEntity(200, "success!", res);
         }
@@ -59,20 +54,24 @@ public class CommodityController {
         if ("buyer".equals(userIdentity)) {
             List<OrderInfo> orderInfoList = orderInfoService.getOrderListByBuyerId(userInfo.getId());
             for (Commodity commodity : commodityList) {
-                res.put(commodity, 0);
+                res.add(new KV(commodity, 0));
             }
             for (OrderInfo orderInfo : orderInfoList) {
-                res.put(commodityService.getCommodity(orderInfo.getCommodityId()), 1);
+                res.add(new KV(commodityService.getCommodity(orderInfo.getCommodityId()), 1));
             }
         }
         //卖家登录时，展示物品列表并标明卖出数量
         else {
+            HashMap<Commodity, Integer> map = new LinkedHashMap<>();
             List<OrderInfo> orderInfoList = orderInfoService.getOrderListBySellerId(userInfo.getId());
             for (Commodity commodity : commodityList) {
-                res.put(commodity, 0);
+                map.put(commodity, 0);
             }
             for (OrderInfo orderInfo : orderInfoList) {
-                res.put(commodityService.getCommodity(orderInfo.getCommodityId()), res.get(commodityService.getCommodity(orderInfo.getCommodityId())) + orderInfo.getNum());
+                map.put(commodityService.getCommodity(orderInfo.getCommodityId()), map.get(commodityService.getCommodity(orderInfo.getCommodityId())) + orderInfo.getNum());
+            }
+            for(Commodity commodity : map.keySet()){
+                res.add(new KV(commodity, map.get(commodity)));
             }
         }
         return new ResultEntity(200, "success!", res);
@@ -97,10 +96,15 @@ public class CommodityController {
         return new ResultEntity(200, "success!", res);
     }
 
+    @GetMapping("/getPicPath")
+    public String getPicPath(){
+        return System.getProperty("user.home") + "/shopping_system_img/";
+    }
+
     @PostMapping("/updatePic")
     public ResultEntity uploadFile(MultipartFile file) {
         String filename = file.getOriginalFilename();
-        String realPath = System.getProperty("user.home") + "/shopping_system_img/";
+        String realPath = getPicPath();
         File fileDir = new File(realPath);
         if (!fileDir.exists()) {
             fileDir.mkdirs();
@@ -132,9 +136,9 @@ public class CommodityController {
     @GetMapping(value = "/showPic")
     public org.springframework.http.ResponseEntity showPic(String fileName) throws FileNotFoundException {
         org.springframework.http.ResponseEntity responseEntity = null;
-        String filePath = System.getProperty("user.home") + "/shopping_system_img/";
+        String filePath = getPicPath();
         File file = null;
-        if(fileName == null || fileName.trim().equals("")){
+        if (fileName == null || fileName.trim().equals("")) {
             file = ResourceUtils.getFile("classpath:static/img/default.png");
             fileName = "default.png";
         } else {

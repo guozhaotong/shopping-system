@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Shopping System Demo</title>
+    <link rel="stylesheet" href="dist/bootstrap3.3.7/bootstrap.min.css">
+</head>
+<body>
+
+<div class="container" id="app">
+
+    <nav class="navbar navbar-default" role="navigation">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">小彤彤的网上商城</a>
+            </div>
+            <div>
+                <!--navbar-left控制向左对齐-->
+                <ul class="nav navbar-nav navbar-left">
+                    <li class="active"><a href="#">首页</a></li>
+                    <li><a href="#">财务</a></li>
+                </ul>
+
+                <!--向右对齐-->
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="#">购物车</a></li>
+                </ul>
+                <p class="navbar-text navbar-right">现在是购买者在登录</p>
+            </div>
+        </div>
+    </nav>
+    <div class="row">
+        <div class="col-sm-4" v-for="item in kvList">
+
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    <a :href="'commodity.html?id='+item.k.id">
+                        <h2 class="panel-title text-left" v-text="item.k.title"></h2>
+                        <h5 class="text-right">
+                            <span v-text="item.k.price"></span>人民币哦
+                        </h5>
+                    </a>
+                </div>
+                <!-- height: 150px 强制了高度 -->
+                <div class="panel-body" style="height: 120px">
+                    <div class="row">
+                        <div class="col-sm-4" v-if="item.k.picAddr==null">
+                            <img src="img/default.png" class="img-responsive" alt="Cinque Terre" width="304"
+                                 height="236">
+                        </div>
+                        <div class="col-sm-4" v-else>
+                            <img :src="'showPic?fileName='+item.k.picAddr" class="img-responsive" alt="Cinque Terre"
+                                 width="304" height="236">
+                        </div>
+                        <div class="col-sm-8" v-text="item.k.brief"/>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+<!-- jquery -->
+<script src="dist/jquery2.1.1.min.js"></script>
+<!-- bootstrap -->
+<script src="dist/bootstrap3.3.7/bootstrap.min.js"></script>
+<!-- vue -->
+<script src="dist/vue2.6.6.min.js"></script>
+<!-- 自己的js -->
+<script src="js/index.js"></script>
+</body>
+</html>

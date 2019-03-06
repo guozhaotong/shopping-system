@@ -1,0 +1,4 @@
+bootstrap教程  http://www.runoob.com/bootstrap/bootstrap-tutorial.html
+ajax参数和使用方法  http://www.cnblogs.com/tylerdonet/p/3520862.html
+vue使用教程  https://www.jianshu.com/p/5d0d913d2453 
+之前使用vue的项目  https://github.com/guozhaotong/MeetingRecord/blob/master/src/main/resources/static/index.html

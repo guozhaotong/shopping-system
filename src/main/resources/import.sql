@@ -21,7 +21,8 @@ create table commodity (id int primary key auto_increment,
                         intro varchar(255),
                         price FLOAT(2),
                         pic_addr varchar(255));
-
+insert into commodity (seller_id, title, brief, intro,price,pic_addr) values (2, '钢琴', '雅马哈钢琴，你值得拥有', '雅马哈钢琴',15000.01,'eeeac404-4bce-4cb7-b9af-75aa50667968.jpg' );
+insert into commodity (seller_id, title, brief, intro,price,pic_addr) values (2, '小提琴', '木质小提琴，超级好用哒', '木质小提琴',2500.22,NULL );
 
 drop table if exists shopping_cart;
 create table shopping_cart (id int primary key auto_increment, buyer_id int, commodity_id int, num int, add_time timestamp);

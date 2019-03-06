@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Shopping System Demo</title>
+    <link rel="stylesheet" href="dist/bootstrap3.3.7/bootstrap.min.css">
+</head>
+<body>
+
+<div class="container" id="app">
+    
+    <nav class="navbar navbar-default" role="navigation">
+        <div class="container-fluid"> 
+        <div class="navbar-header">
+            <a class="navbar-brand" href="index.html">小彤彤的网上商城</a>
+        </div>
+        <div>
+            <!--navbar-left控制向左对齐-->
+            <ul class="nav navbar-nav navbar-left">
+                <li><a href="index.html">首页</a></li>
+			<li><a href="#">财务</a></li>
+            </ul>
+            
+            <!--向右对齐-->
+            <ul class="nav navbar-nav navbar-right">
+                <li ><a href="#">购物车</a></li>
+            </ul>
+            <p class="navbar-text navbar-right">现在是购买者在登录</p>
+        </div>
+        </div>
+    </nav>
+    <div>
+        <p v-text="commodity.title"></p>
+    </div>
+</div>
+
+<!-- jquery -->
+<script src="dist/jquery2.1.1.min.js"></script>
+<!-- bootstrap -->
+<script src="dist/bootstrap3.3.7/bootstrap.min.js"></script>
+<!-- vue -->
+<script src="dist/vue2.6.6.min.js"></script>
+<!-- 自己的js -->
+<script src="js/commodity.js"></script>
+</body>
+</html>

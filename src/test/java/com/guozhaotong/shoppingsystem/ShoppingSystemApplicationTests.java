@@ -1,6 +1,5 @@
 package com.guozhaotong.shoppingsystem;
 
-import com.guozhaotong.shoppingsystem.entity.Commodity;
 import com.guozhaotong.shoppingsystem.entity.ResultEntity;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -13,6 +12,7 @@ import org.springframework.util.Assert;
 import org.springframework.util.LinkedMultiValueMap;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -48,7 +48,7 @@ public class ShoppingSystemApplicationTests {
         map4.add("title", "商品333333名称");
         Assert.isTrue((boolean) this.restTemplate.postForEntity("/addNewCommodity", map4, ResultEntity.class).getBody().getData(), "插入错误");
         //testGetCommodityList
-        Assert.isTrue(((LinkedHashMap<Commodity, Integer>) this.restTemplate.getForEntity("/getCommodityList", ResultEntity.class).getBody().getData()).size() == 3, "数量不符");
+        Assert.isTrue(((List) this.restTemplate.getForEntity("/getCommodityList", ResultEntity.class).getBody().getData()).size() == 3, "数量不符");
 
         //updateCommodity
         LinkedMultiValueMap<String, Object> map2 = new LinkedMultiValueMap<>();
@@ -99,7 +99,7 @@ public class ShoppingSystemApplicationTests {
 
 //        System.err.println(this.restTemplate.getForEntity("/getShoppingCartList?buyerId={buyerId}", ResultEntity.class, 1).getBody().getData());
 
-        Assert.isTrue(((LinkedHashMap<Commodity, Integer>) this.restTemplate.getForEntity("/getShoppingCartList?buyerId={buyerId}", ResultEntity.class, 1).getBody().getData()).size() == 3, "数量不符");
+        Assert.isTrue(((List) this.restTemplate.getForEntity("/getShoppingCartList?buyerId={buyerId}", ResultEntity.class, 1).getBody().getData()).size() == 3, "数量不符");
 
         //deleteShoppingCartOneRecord
         LinkedMultiValueMap<String, Object> map9 = new LinkedMultiValueMap<>();
@@ -107,7 +107,7 @@ public class ShoppingSystemApplicationTests {
         map9.add("commodityId", 3);
         Assert.isTrue((boolean) this.restTemplate.postForEntity("/deleteShoppingCartOneRecord", map9, ResultEntity.class).getBody().getData(), "删除错误");
 
-        Assert.isTrue(((LinkedHashMap<Commodity, Integer>) this.restTemplate.getForEntity("/getShoppingCartList?buyerId={buyerId}", ResultEntity.class, 1).getBody().getData()).size() == 2, "数量不符");
+        Assert.isTrue(((List) this.restTemplate.getForEntity("/getShoppingCartList?buyerId={buyerId}", ResultEntity.class, 1).getBody().getData()).size() == 2, "数量不符");
 
         System.err.println(this.restTemplate.getForEntity("/getSumPriceOfShoppingCart?buyerId={buyerId}", ResultEntity.class, 1).getBody().getData());
 
@@ -115,7 +115,7 @@ public class ShoppingSystemApplicationTests {
         map3.add("buyerId", 1);
         this.restTemplate.postForEntity("/buyAllShoppingCart", map3, ResultEntity.class);
 
-        Assert.isTrue(((LinkedHashMap<Commodity, Integer>) this.restTemplate.getForEntity("/getShoppingCartList?buyerId={buyerId}", ResultEntity.class, 1).getBody().getData()).size() == 0, "数量不符");
+        Assert.isTrue(((List) this.restTemplate.getForEntity("/getShoppingCartList?buyerId={buyerId}", ResultEntity.class, 1).getBody().getData()).size() == 0, "数量不符");
 
 
         System.err.println(this.restTemplate.getForEntity("/sumPrice?buyerId={buyerId}", ResultEntity.class, 1));
