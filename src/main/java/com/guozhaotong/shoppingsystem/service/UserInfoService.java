@@ -21,10 +21,17 @@ public class UserInfoService {
      * @param passwordMd
      * @return
      */
-    public boolean login(String userName, String passwordMd){
-        String passwordBase64 = userInfoMapper.findPasswordByName(userName);
-        String password = Encryption.deBase64(passwordBase64);
-        return Encryption.md5(password).equals(passwordMd);
+    public UserInfo login(String userName, String passwordMd){
+        UserInfo userInfo = userInfoMapper.findByName(userName);
+        if (userInfo==null){
+            return null;
+        }
+        String password = Encryption.deBase64(userInfo.getPassword());
+        if (Encryption.md5(password).equals(passwordMd)){
+            userInfo.setPassword(null);
+            return userInfo;
+        }
+        return null;
     }
 
     public UserInfo findByUserName(String userName){

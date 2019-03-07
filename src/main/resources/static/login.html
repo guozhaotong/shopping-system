@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Shopping System Demo</title>
+    <link rel="stylesheet" href="dist/bootstrap3.3.7/bootstrap.min.css">
+</head>
+<body>
+
+<div class="container" id="app">
+
+    <div style="padding: 100px 100px 10px;">
+        <h1 class="text-center">登录</h1>
+        <form class="bs-example bs-example-form" role="form" style="padding: 100px 100px 10px;">
+            <div class="input-group input-group-lg">
+                <span class="input-group-addon">&nbsp;&nbsp;用户名&nbsp;&nbsp;</span>
+                <input type="text" class="form-control" v-model="userName">
+            </div><br>
+            <div class="input-group input-group-lg">
+                <span class="input-group-addon">&nbsp;&nbsp;密 &nbsp;&nbsp;&nbsp;码&nbsp;&nbsp;</span>
+                <input type="text" class="form-control" v-model="password">
+            </div><br>
+            <div class="form-group">
+                <div class="">
+                    <button type="button" class="btn btn-primary btn-lg btn-block" v-on:click="getCommodityList()">登录</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<!-- jquery -->
+<script src="dist/jquery2.1.1.min.js"></script>
+<!--base64-->
+<script src="dist/md5.2.10.0.min.js"></script>
+<!--cookie-->
+<script src="dist/jquery.cookie.1.4.1.min.js"></script>
+<!-- bootstrap -->
+<script src="dist/bootstrap3.3.7/bootstrap.min.js"></script>
+<!-- vue -->
+<script src="dist/vue2.6.6.min.js"></script>
+<!-- 自己的js -->
+<script src="js/login.js"></script>
+</body>
+</html>

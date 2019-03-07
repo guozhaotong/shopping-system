@@ -1,7 +1,8 @@
 var vm = new Vue({
     el: '#app',
     data: {
-        kvList: {}
+        kvList: {},
+        picPath:""
     },
     methods: {
         getCommodityList: function () {

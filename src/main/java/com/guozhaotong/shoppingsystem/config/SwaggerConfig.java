@@ -1,4 +1,4 @@
-package com.guozhaotong.shoppingsystem.common;
+package com.guozhaotong.shoppingsystem.config;
 
 
 import com.google.common.base.Predicate;

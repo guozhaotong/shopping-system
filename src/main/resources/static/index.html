@@ -30,30 +30,30 @@
         </div>
     </nav>
     <div class="row">
-        <div class="col-sm-4" v-for="item in kvList">
+        <div class="col-sm-2" v-for="item in kvList">
 
             <div class="panel panel-info">
                 <div class="panel-heading">
                     <a :href="'commodity.html?id='+item.k.id">
                         <h2 class="panel-title text-left" v-text="item.k.title"></h2>
                         <h5 class="text-right">
-                            <span v-text="item.k.price"></span>人民币哦
+                            ￥<span v-text="item.k.price" style="color: red;"></span>
                         </h5>
                     </a>
                 </div>
                 <!-- height: 150px 强制了高度 -->
-                <div class="panel-body" style="height: 120px">
+                <div class="panel-body">
+                    <a :href="'commodity.html?id='+item.k.id">
                     <div class="row">
-                        <div class="col-sm-4" v-if="item.k.picAddr==null">
-                            <img src="img/default.png" class="img-responsive" alt="Cinque Terre" width="304"
-                                 height="236">
+                        <div class="col-sm-12" v-if="item.k.picAddr==null">
+                            <img src="img/default.png" class="img-responsive" alt="Cinque Terre" style="height: 120px">
                         </div>
-                        <div class="col-sm-4" v-else>
+                        <div class="col-sm-12" v-else>
                             <img :src="'showPic?fileName='+item.k.picAddr" class="img-responsive" alt="Cinque Terre"
-                                 width="304" height="236">
+                                 style="height: 120px">
                         </div>
-                        <div class="col-sm-8" v-text="item.k.brief"/>
                     </div>
+                    </a>
                 </div>
             </div>
 
