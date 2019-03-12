@@ -25,7 +25,7 @@ public class ShoppingCartController {
     @Autowired
     CommodityService commodityService;
 
-    @GetMapping("/getShoppingCartList")
+    @GetMapping("/api/getShoppingCartList")
     public ResultEntity getShoppingCartList(long buyerId) {
         List<KV> res = new ArrayList<>();
 //        LinkedHashMap<ShoppingCart, Boolean> res = new LinkedHashMap<>();
@@ -42,19 +42,19 @@ public class ShoppingCartController {
         return new ResultEntity(200, "success!", res);
     }
 
-    @PostMapping("/addCommodityToShoppingCart")
+    @PostMapping("/api/addCommodityToShoppingCart")
     public ResultEntity addCommodityToShoppingCart(long buyerId, long commodityId, int num) {
         boolean res = shoppingCartService.addCommodityToShoppingCart(buyerId, commodityId, num);
         return new ResultEntity(200, "success!", res);
     }
 
-    @PostMapping("/deleteShoppingCartOneRecord")
+    @PostMapping("/api/deleteShoppingCartOneRecord")
     public ResultEntity deleteShoppingCartOneRecord(long buyerId, long commodityId) {
         boolean res = shoppingCartService.deleteShoppingCartOneRecord(buyerId, commodityId);
         return new ResultEntity(200, "success!", res);
     }
 
-    @GetMapping("/getSumPriceOfShoppingCart")
+    @GetMapping("/api/getSumPriceOfShoppingCart")
     public ResultEntity getSumPriceOfShoppingCart(long buyerId) {
         float res = shoppingCartService.getSumPriceOfShoppingCart(buyerId);
         return new ResultEntity(200, "success!", res);

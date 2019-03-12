@@ -77,13 +77,13 @@ public class CommodityController {
         return new ResultEntity(200, "success!", res);
     }
 
-    @PostMapping("/addNewCommodity")
+    @PostMapping("/api/addNewCommodity")
     public ResultEntity addNewCommodity(Commodity commodity) {
         boolean res = commodityService.addNewCommodity(commodity);
         return new ResultEntity(200, "success!", res);
     }
 
-    @PostMapping("/updateCommodity")
+    @PostMapping("/api/updateCommodity")
     public ResultEntity updateCommodity(Commodity commodity) {
         commodityService.deleteUselessPic(commodity.getId(), commodity.getPicAddr());
         boolean res = commodityService.updateCommodity(commodity);
@@ -101,7 +101,7 @@ public class CommodityController {
         return System.getProperty("user.home") + "/shopping_system_img/";
     }
 
-    @PostMapping("/updatePic")
+    @PostMapping("/api/updatePic")
     public ResultEntity uploadFile(MultipartFile file) {
         String filename = file.getOriginalFilename();
         String realPath = getPicPath();

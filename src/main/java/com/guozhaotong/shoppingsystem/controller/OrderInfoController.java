@@ -29,13 +29,13 @@ public class OrderInfoController {
     @Autowired
     CommodityService commodityService;
 
-    @GetMapping("/getOrderList")
+    @GetMapping("/api/getOrderList")
     public ResultEntity getOrderList(long buyerId) {
         List<OrderInfo> res = orderInfoService.getOrderListByBuyerId(buyerId);
         return new ResultEntity(200, "success!", res);
     }
 
-//    @PostMapping("/buyOne")
+//    @PostMapping("/api/buyOne")
     public ResultEntity buyOne(long buyerId, long commodityId, int num) {
         boolean res =  orderInfoService.addNewOrder(new OrderInfo(buyerId, commodityId, new Date(), num, commodityService.getCommodityPrice(commodityId)));
         //购买后，购物车中的内容随之删除
@@ -43,13 +43,13 @@ public class OrderInfoController {
         return new ResultEntity(200, "success!", res);
     }
 
-    @GetMapping("/sumPrice")
+    @GetMapping("/api/sumPrice")
     public ResultEntity getSumPriceOfBuyer(long buyerId){
         float res = orderInfoService.getSumPriceOfBuyer(buyerId);
         return new ResultEntity(200, "success!", res);
     }
 
-    @PostMapping("/buyAllShoppingCart")
+    @PostMapping("/api/buyAllShoppingCart")
     public ResultEntity buy(long buyerId){
         List<ShoppingCart> shoppingCartListOfBuyer = shoppingCartService.getShoppingCartList(buyerId);
         for(ShoppingCart shoppingCart : shoppingCartListOfBuyer){

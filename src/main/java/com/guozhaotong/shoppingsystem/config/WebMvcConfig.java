@@ -12,7 +12,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupp
  * @author 郭朝彤
  * @date 2019/3/7.
  */
-//@Configuration
+@Configuration
 public class WebMvcConfig extends WebMvcConfigurationSupport {
 
     @Autowired
@@ -23,14 +23,7 @@ public class WebMvcConfig extends WebMvcConfigurationSupport {
         InterceptorRegistration addInterceptor = registry.addInterceptor(authInterceptor);
 
         // 拦截配置
-        addInterceptor.addPathPatterns("/**");
-        // 排除配置
-        addInterceptor.excludePathPatterns("/error");
-        //排除静态资源
-        addInterceptor.excludePathPatterns("/static/**");
-        addInterceptor.excludePathPatterns("/login.html");
-        addInterceptor.excludePathPatterns("/login");
-        addInterceptor.excludePathPatterns("/index.html");
+        addInterceptor.addPathPatterns("/api/**");
     }
 
     @Override

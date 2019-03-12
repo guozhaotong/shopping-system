@@ -11,7 +11,7 @@ var vm = new Vue({
             console.log()
             $.ajax({
                 type: "post",
-                url: "/login",
+                url: "/loginapi",
                 data: {userName: this.userName, passwordMd: md5(vm.password)},
                 success: function (data) {
                     console.log(data.data)
