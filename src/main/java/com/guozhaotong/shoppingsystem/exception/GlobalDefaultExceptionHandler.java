@@ -24,7 +24,7 @@ public class GlobalDefaultExceptionHandler {
     public void defaultErrorHandler(HttpServletRequest req, Exception e, HttpServletResponse response) throws IOException {
         logger.error(e.getMessage(),e);
         Writer writer = response.getWriter();
-        ResultEntity resultEntity = new ResultEntity(500, "Internal error", null);
+        ResultEntity resultEntity = new ResultEntity(500, "Internal error", e.getMessage());
         writer.write(JSON.toJSONString(resultEntity));
     }
 

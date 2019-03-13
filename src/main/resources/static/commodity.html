@@ -3,65 +3,202 @@
 <head>
     <meta charset="UTF-8">
     <title>Shopping System Demo</title>
-    <link rel="stylesheet" href="dist/bootstrap3.3.7/bootstrap.min.css">
+    <link rel="stylesheet" href="dist/bootstrap3.3.7/css/bootstrap.css">
+    <style>
+        a {
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
 
 <div class="container" id="app">
-    
-    <nav class="navbar navbar-default" role="navigation">
-        <div class="container-fluid"> 
-        <div class="navbar-header">
-            <a class="navbar-brand" href="index.html">小彤彤的网上商城</a>
-        </div>
-        <div>
-            <!--navbar-left控制向左对齐-->
-            <ul class="nav navbar-nav navbar-left">
-                <li><a href="index.html">首页</a></li>
-			<li><a href="#">财务</a></li>
-            </ul>
-            
-            <!--向右对齐-->
-            <ul class="nav navbar-nav navbar-right">
-                <li ><a href="#">购物车</a></li>
-            </ul>
-            <p class="navbar-text navbar-right">现在是购买者在登录</p>
-        </div>
-        </div>
-    </nav>
-    <div>
-
-        <div class="row">
-            <div class="col-sm-12">
-                <div class="col-sm-6">
-                    <div v-if="commodity.picAddr==null">
-                        <img src="img/default.png" class="img-responsive" alt="Cinque Terre" >
-                    </div>
-                    <div  v-else>
-                        <img :src="'showPic?fileName='+commodity.picAddr" class="img-responsive img-thumbnail" alt="Cinque Terre"
-                        >
-                    </div>
+    <!-- 购物车 -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog" style="width: 70%">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">
+                        购物车
+                    </h4>
                 </div>
-                <div class="col-sm-6">
-                    <h1 class="text-center" v-text="commodity.title"></h1>
-                    <p > <b>简介：</b><span v-text="commodity.brief"></span> </p>
-                    <h3 > <b>￥</b><span style="color: red" v-text="commodity.price"></span> </h3>
+                <div class="modal-body">
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th>序号</th>
+                            <th>名称</th>
+                            <th>价格</th>
+                            <th>数量</th>
+                            <th>合计</th>
+                            <th>添加时间</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr v-for="(item,index) in shoppingCartList">
+                            <td v-text="index"></td>
+                            <td v-text="item.v.title"></td>
+                            <td v-text="item.v.price"></td>
+                            <td v-text="item.k.num"></td>
+                            <td v-text="item.v.price * item.k.num"></td>
+                            <td v-text="timestap2DateString(item.k.addTime)"></td>
+                            <td>
+                                <a v-on:click="deleteShoppingCartOneRecord(item.v.id)">
+                                    <span class="glyphicon glyphicon-remove">删除</span>
+                                </a>
+
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <h4 class="text-right">总价：<span style="color: red" v-text="sumPriceOfShoppingCart"></span>元</h4>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" v-on:click="buyAllShoppingCart">全部购买</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">继续购物</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div><!-- /.购物车 -->
+
+    <!-- 财务 -->
+    <div class="modal fade" id="finance" tabindex="-1" role="dialog" aria-labelledby="financeLabel" aria-hidden="true">
+        <div class="modal-dialog" style="width: 70%">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title" id="financeLabel">
+                        财务
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th>序号</th>
+                            <th>图片</th>
+                            <th>标题</th>
+                            <th>单价</th>
+                            <th>数量</th>
+                            <th>总价</th>
+                            <th>购买时间</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr v-for="(item,index) in orderList">
+                            <td v-text="index"></td>
+                            <td>
+                                <img :src="'showPic?fileName='+item.v.picAddr" class="img-responsive" alt="Cinque Terre"
+                                     style="height: 40px">
+                            </td>
+                            <td v-text="item.v.title"></td>
+                            <td v-text="item.v.price"></td>
+                            <td v-text="item.k.num"></td>
+                            <td v-text="item.v.price*item.k.num"></td>
+                            <td v-text="timestap2DateString(item.k.finishTime)"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <h4 class="text-right">历史总消费：<span style="color: red" v-text="sumPriceOfOrderList"></span>元</h4>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">关闭</button>
                 </div>
             </div>
         </div>
-        <div style="margin-top: 20px">
-            <h3 class="page-header" >详细信息展示</h3>
-        </div>
-        <div class="col-sm-12" v-text="commodity.intro">
+    </div><!-- /.财务 -->
+    <nav class="navbar navbar-default" role="navigation">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="/index.html">小彤彤的网上商城</a>
+            </div>
+            <div>
+                <!--navbar-left控制向左对齐-->
+                <ul class="nav navbar-nav navbar-left">
+                    <li><a href="/index.html">首页</a></li>
+                    <li><a href="#" v-if="userInfo!==undefined && userInfo.identity==='buyer'"
+                           v-on:click="openOrderList">财务</a></li>
+                    <li><a href="#" v-if="userInfo!==undefined && userInfo.identity==='buyer'"
+                           v-on:click="openShoppingCart">购物车</a></li>
+                    <li><a href="publish.html" v-if="userInfo!==undefined && userInfo.identity==='seller'">发布</a></li>
+                </ul>
 
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a v-if="userInfo!==undefined " v-on:click="loginout">退出&nbsp;
+                        &nbsp; &nbsp; &nbsp;</a></li>
+                </ul>
+                <p class="navbar-text navbar-right" v-if="userInfo===undefined"><a href="login.html">登录</a></p>
+                <p class="navbar-text navbar-right" v-else-if="userInfo.identity==='buyer'">买家 <span
+                        v-text="userInfo.name" style="color: darkgreen;"></span> 已登录</p>
+                <p class="navbar-text navbar-right" v-else="userInfo.identity==='seller'">卖家 <span
+                        v-text="userInfo.name" style="color: darkgreen;"></span> 已登录</p>
+            </div>
+        </div>
+    </nav>
+
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="col-sm-6">
+                <div>
+
+                    <img :src="'showPic?fileName='+commodity.picAddr" class="img-responsive img-thumbnail"
+                         alt="pic"
+                    >
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <h1 class="text-center" v-text="commodity.title"></h1>
+                <p><b>简介：</b><span v-text="commodity.brief"></span></p>
+                <h3>
+                    <b>￥</b><span style="color: red" v-text="commodity.price"></span>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <span style="color: gray"
+                          v-if="userInfo!==undefined && orderInfo!==null && userInfo.identity==='buyer'"><b>上次购买价：￥</b><span
+                            v-text="orderInfo.priceWhenBuy"></span></span>
+                </h3>
+                <p v-if="(userInfo!==undefined && userInfo.identity !='seller')||(userInfo===undefined )">
+                    <a href="#" v-on:click="buyerNumber=buyerNumber-1">
+                        <span class="glyphicon glyphicon-minus"></span>
+                    </a>
+                    &nbsp;&nbsp;&nbsp;
+                    <span v-text="buyerNumber"></span>
+                    &nbsp;&nbsp;&nbsp;
+                    <a href="#" v-on:click="buyerNumber=buyerNumber+1">
+                        <span class="glyphicon glyphicon-plus"></span>
+                    </a>
+                </p>
+                <p>
+                    <button type="button" class="btn btn-danger"
+                            v-if="(userInfo!==undefined && userInfo.identity !='seller')||(userInfo===undefined )"
+                            v-on:click="addCommodityToShoppingCart">购买
+                    </button>
+                    <a :href="'/publish.html?commodityId='+commodity.id" class="btn btn-primary"
+                       v-if="userInfo!==undefined && userInfo.identity ==='seller'">编辑</a>
+                </p>
+            </div>
         </div>
     </div>
+    <div style="margin-top: 20px">
+        <h3 class="page-header">详细信息展示</h3>
+    </div>
+    <div class="col-sm-12" v-text="commodity.intro">
+
+    </div>
+</div>
 </div>
 
 <!-- jquery -->
 <script src="dist/jquery2.1.1.min.js"></script>
+<!--cookie-->
+<script src="dist/jquery.cookie.1.4.1.min.js"></script>
 <!-- bootstrap -->
-<script src="dist/bootstrap3.3.7/bootstrap.min.js"></script>
+<script src="dist/bootstrap3.3.7/js/bootstrap.js"></script>
 <!-- vue -->
 <script src="dist/vue2.6.6.min.js"></script>
 <!-- 自己的js -->

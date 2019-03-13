@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Shopping System Demo</title>
+    <link rel="stylesheet" href="dist/bootstrap3.3.7/css/bootstrap.css">
+    <style>
+        a {
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container" id="app">
+    <nav class="navbar navbar-default" role="navigation">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">小彤彤的网上商城</a>
+            </div>
+            <div>
+                <!--navbar-left控制向左对齐-->
+                <ul class="nav navbar-nav navbar-left">
+                    <li><a href="/index.html">首页</a></li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a v-if="userInfo!==undefined " v-on:click="loginout">退出&nbsp;
+                        &nbsp; &nbsp; &nbsp;</a></li>
+                </ul>
+                <p class="navbar-text navbar-right" v-if="userInfo===undefined"><a href="login.html">登录</a></p>
+                <p class="navbar-text navbar-right" v-else-if="userInfo.identity==='buyer'">买家 <span
+                        v-text="userInfo.name" style="color: darkgreen;"></span> 已登录</p>
+                <p class="navbar-text navbar-right" v-else="userInfo.identity==='seller'">卖家 <span
+                        v-text="userInfo.name" style="color: darkgreen;"></span> 已登录</p>
+            </div>
+        </div>
+    </nav>
+    <div class="row container">
+
+        <div role="form">
+            <div class="row">
+                <div class="form-group col-sm-4">
+                    <label for="title">标题</label>
+                    <input type="text" class="form-control" id="title"
+                           placeholder="2-80字符" v-model="title">
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-sm-4">
+                    <label for="brief">摘要</label>
+                    <input type="text" class="form-control" id="brief"
+                           placeholder="2-140字符" v-model="brief">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <form enctype="multipart/form-data" id="form_img">
+                        <input type="file" name="imgFile"/>
+                        <div style="text-align: center">
+                            <button type="button" id="btn_submit_img" value=" 上 传 ">上 传</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="col-sm-6">
+                    <img :src="'showPic?fileName='+picAddr" class="img-responsive" alt="pic"
+                         style="height: 150px">
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-sm-12">
+                    <label for="intro">正文</label>
+                    <textarea type="text" class="form-control" id="intro"
+                              placeholder="2-1000个字符" style="height: 150px" v-model="intro"></textarea>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-sm-4">
+                    <label for="price">价格</label>
+                    <input type="text" class="form-control" id="price" v-model="price"
+                           placeholder="请输入正的浮点数">
+                </div>
+            </div>
+            <div class="row col-sm-6">
+                <button type="button" class="btn btn-danger btn-lg" v-on:click="publish">发布</button>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+
+<!-- jquery -->
+<script src="dist/jquery-3.3.1.min.js"></script>
+<script src="dist/jquery.form.4.2.2.js"></script>
+<!--cookie-->
+<script src="dist/jquery.cookie.1.4.1.min.js"></script>
+<!-- bootstrap -->
+<script src="dist/bootstrap3.3.7/js/bootstrap.js"></script>
+<!-- vue -->
+<script src="dist/vue2.6.6.min.js"></script>
+<!-- 自己的js -->
+<script src="js/publish.js"></script>
+</body>
+</html>

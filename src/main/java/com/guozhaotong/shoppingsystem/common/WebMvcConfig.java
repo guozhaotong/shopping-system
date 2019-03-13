@@ -1,4 +1,4 @@
-package com.guozhaotong.shoppingsystem.config;
+package com.guozhaotong.shoppingsystem.common;
 
 import com.guozhaotong.shoppingsystem.intercepter.AuthInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,8 +33,6 @@ public class WebMvcConfig extends WebMvcConfigurationSupport {
                 .addResourceLocations("classpath:/static/")
                 .addResourceLocations("classpath:/public/");
         super.addResourceHandlers(registry);
-
-
     }
 
 

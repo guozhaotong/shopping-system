@@ -1,5 +1,6 @@
 package com.guozhaotong.shoppingsystem.controller;
 
+import com.guozhaotong.shoppingsystem.entity.Commodity;
 import com.guozhaotong.shoppingsystem.entity.KV;
 import com.guozhaotong.shoppingsystem.entity.ResultEntity;
 import com.guozhaotong.shoppingsystem.entity.ShoppingCart;
@@ -28,17 +29,11 @@ public class ShoppingCartController {
     @GetMapping("/api/getShoppingCartList")
     public ResultEntity getShoppingCartList(long buyerId) {
         List<KV> res = new ArrayList<>();
-//        LinkedHashMap<ShoppingCart, Boolean> res = new LinkedHashMap<>();
         List<ShoppingCart> shoppingCartList = shoppingCartService.getShoppingCartList(buyerId);
-        List<Long> commodityIdList = commodityService.getCommodityIdList();
         for (ShoppingCart shoppingCart : shoppingCartList) {
-            if (commodityIdList.contains(shoppingCart.getCommodityId())) {
-                res.add(new KV(shoppingCart, true));
-            } else {
-                res.add(new KV(shoppingCart, false));
-            }
+            Commodity commodity = commodityService.getCommodity(shoppingCart.getCommodityId());
+            res.add(new KV(shoppingCart, commodity));
         }
-
         return new ResultEntity(200, "success!", res);
     }
 

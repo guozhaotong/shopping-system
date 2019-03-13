@@ -7,7 +7,6 @@ import com.guozhaotong.shoppingsystem.util.Encryption;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -35,12 +34,15 @@ public class UserInfoController {
     @PostMapping("/loginapi")
     public ResultEntity login(String userName, String passwordMd, HttpServletResponse httpServletResponse) {
         UserInfo userInfo = userInfoService.login(userName, passwordMd);
-        if (userInfo!=null) {
+        if (userInfo != null) {
             //token为用base64加密后的用户ID+身份
-            String token = Encryption.base64(userInfo.getId() + "|" + userInfo.getIdentity()+"|"+ UUID.randomUUID().toString());
+            String token = Encryption.base64(userInfo.getId() + "|" + userInfo.getIdentity() + "|" + UUID.randomUUID().toString());
             tokenMap.put(token, System.currentTimeMillis());
             logger.debug(token);
-            httpServletResponse.addCookie(new Cookie("token", token));
+            Cookie cookie = new Cookie("token", token);
+            // 设置一个小时的过期时间
+            cookie.setMaxAge(60 * 60 );
+            httpServletResponse.addCookie(cookie);
             return new ResultEntity(200, "success!", userInfo);
         } else {
             return new ResultEntity(403, "fail!", null);

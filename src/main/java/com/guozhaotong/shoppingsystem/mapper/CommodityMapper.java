@@ -2,6 +2,7 @@ package com.guozhaotong.shoppingsystem.mapper;
 
 import com.guozhaotong.shoppingsystem.entity.Commodity;
 import org.apache.ibatis.annotations.*;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
@@ -9,6 +10,7 @@ import java.util.List;
  * @author 郭朝彤
  * @date 2019/3/1.
  */
+@Component
 public interface CommodityMapper {
     @Select("select * from commodity")
     List<Commodity> findAll();

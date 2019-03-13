@@ -3,6 +3,7 @@ package com.guozhaotong.shoppingsystem.service;
 import com.guozhaotong.shoppingsystem.entity.Commodity;
 import com.guozhaotong.shoppingsystem.mapper.CommodityMapper;
 import com.guozhaotong.shoppingsystem.mapper.OrderInfoMapper;
+import com.guozhaotong.shoppingsystem.mapper.ShoppingCartMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +21,9 @@ public class CommodityService {
 
     @Autowired
     OrderInfoMapper orderInfoMapper;
+
+    @Autowired
+    ShoppingCartMapper shoppingCartMapper;
 
     public List<Commodity> getCommodityList() {
         return commodityMapper.findAll();
@@ -48,14 +52,21 @@ public class CommodityService {
 
     /**
      * 题目要求卖出去过的商品不能被删除。
+     * 删除商品的时候顺便把购物车中的商品也删掉了，用户将不可购买
      *
      * @param commodityId
      * @return
      */
-    public boolean delete(long commodityId) {
-        int sellNum = orderInfoMapper.countByCommodityId(commodityId);
+    public boolean delete(long commodityId, String picAddr) {
+        int sellNum = orderInfoMapper.countByCommodityId(commodityId).orElse(0);
         if (sellNum == 0) {
+            shoppingCartMapper.deleteByCommodityId(commodityId);
             commodityMapper.deleteById(commodityId);
+            if (picAddr != null) {
+                String realPath = System.getProperty("user.home") + "\\shopping_system_img\\";
+                File fileDelete = new File(realPath + picAddr);
+                fileDelete.delete();
+            }
             return true;
         } else {
             return false;

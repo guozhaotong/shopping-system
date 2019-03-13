@@ -1,4 +1,4 @@
-package com.guozhaotong.shoppingsystem.config;
+package com.guozhaotong.shoppingsystem.common;
 
 import com.alibaba.fastjson.JSON;
 import org.aspectj.lang.JoinPoint;
@@ -24,10 +24,10 @@ import java.util.Arrays;
 @Aspect
 @Component
 @Order(1)
-public class AspectDemo {
+public class LogAspect {
 
 
-    private Logger log = LoggerFactory.getLogger(AspectDemo.class);
+    private Logger log = LoggerFactory.getLogger(LogAspect.class);
 
 
     /**

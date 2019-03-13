@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author 郭朝彤
@@ -23,13 +24,18 @@ public class ShoppingCartService {
 
     /**
      * 加入购物车分两种情况：1.用户购物车中已有该商品； 2.用户购物车中没有该商品
+     *
      * @param buyerId
      * @param commodityId
      * @param numOfAdd
      * @return
      */
     public boolean addCommodityToShoppingCart(long buyerId, long commodityId, int numOfAdd) {
-        int numBefore = shoppingCartMapper.countBuyerIdAndCommodityId(buyerId, commodityId);
+        int numBefore = 0;
+        Optional<Integer> oldNum = shoppingCartMapper.sumNumByBuyerIdAndCommodityId(buyerId, commodityId);
+        if (oldNum.isPresent()) {
+            numBefore = oldNum.get();
+        }
         int res;
         if (numBefore == 0) {
             ShoppingCart shoppingCart = new ShoppingCart(buyerId, commodityId, numOfAdd, new Date());
@@ -40,15 +46,18 @@ public class ShoppingCartService {
         return res == 1;
     }
 
-    public boolean deleteShoppingCartOneRecord(long buyerId, long commodityId){
+    public boolean deleteShoppingCartOneRecord(long buyerId, long commodityId) {
         return shoppingCartMapper.deleteByBuyerIdAndCommodityId(buyerId, commodityId) == 1;
     }
 
-    public float getSumPriceOfShoppingCart(long buyerId){
+    public float getSumPriceOfShoppingCart(long buyerId) {
+        if (shoppingCartMapper.countByBuyerId(buyerId) == 0) {
+            return 0;
+        }
         return shoppingCartMapper.sumPrice(buyerId);
     }
 
-    public int deleteShoppingCartByBuyerId(long buyerId){
+    public int deleteShoppingCartByBuyerId(long buyerId) {
         return shoppingCartMapper.deleteByBuyerId(buyerId);
     }
 }
